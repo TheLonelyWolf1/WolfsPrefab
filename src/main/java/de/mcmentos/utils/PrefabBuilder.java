@@ -1,34 +1,66 @@
 package de.mcmentos.utils;
 
+import com.sk89q.worldedit.EditSession;
+import com.sk89q.worldedit.LocalSession;
+import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.WorldEditException;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.extent.clipboard.Clipboard;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
+import com.sk89q.worldedit.function.operation.Operation;
+import com.sk89q.worldedit.function.operation.Operations;
+import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldedit.math.transform.AffineTransform;
+import com.sk89q.worldedit.session.ClipboardHolder;
+import de.mcmentos.Wolfsprefab;
 import org.bukkit.*;
-import org.bukkit.block.Block;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.entity.Player;
 
-import java.util.List;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
 public class PrefabBuilder {
 
-    public static void buildPrefab(World world, Block clicked_Block, String PlayerDirection, ItemStack item){
-        double ClickedBLockLocationX = clicked_Block.getLocation().getX();
-        double ClickedBLockLocationY = clicked_Block.getLocation().getY();
-        double ClickedBLockLocationZ = clicked_Block.getLocation().getZ();
+    static org.bukkit.plugin.Plugin Plugin = Wolfsprefab.getInstance();
+    static File df = Plugin.getDataFolder();
+    static File prefab_schematic;
 
-        ConfigurationSection prefab = PrefabFileHandler.loadPrefabYaml("dirthouse");
-        //String Prefabname = PrefabFileHandler.getPrefabName(prefab);
-        //Bukkit.getConsoleSender().sendMessage(prefab.getCurrentPath() + Prefabname);
-
-        world.playSound(clicked_Block.getLocation(), Sound.BLOCK_SMITHING_TABLE_USE,1 ,1);
-        List<String> blocks = PrefabFileHandler.getBlocks(prefab);
-        for(String block : blocks){
-            // - X Y Z Material Direction
-            String[] block_args = block.split(" ");
-            Bukkit.getConsoleSender().sendMessage(String.valueOf(block_args.length));
-            Bukkit.getConsoleSender().sendMessage(block_args[0] + block_args[1] + block_args[2] + block_args[3] + block_args[4]);
-            Bukkit.getConsoleSender().sendMessage(clicked_Block.getLocation().toString());
-            Location prefab_block = new Location(world, ClickedBLockLocationX + Double.parseDouble(block_args[0]), ClickedBLockLocationY + Double.parseDouble(block_args[1]),ClickedBLockLocationZ + Double.parseDouble(block_args[2]));
-            Bukkit.getConsoleSender().sendMessage(prefab_block.toString());
-            world.getBlockAt(prefab_block).setType(Material.valueOf(block_args[3].toUpperCase()));
+    public static void loadSchematic(Player p, String name, Location Loc, String Direction) throws IOException, WorldEditException {
+        World world = p.getWorld();
+        Clipboard clipboard;
+        prefab_schematic = new File(df, "prefabs" + File.separator + name + ".schem");
+        ClipboardFormat format = ClipboardFormats.findByFile(prefab_schematic);
+        try (ClipboardReader reader = format.getReader(Files.newInputStream(prefab_schematic.toPath()))) {
+            clipboard = reader.read();
+        }
+        try (EditSession editSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(BukkitAdapter.adapt(world), -1)) {
+            ClipboardHolder holder = new ClipboardHolder(clipboard);
+            AffineTransform transform = new AffineTransform();
+            if(Direction.equals("East")){
+                transform = transform.rotateY(90);
+                transform = transform.rotateX(0);
+                transform = transform.rotateZ(0);
+                holder.setTransform(holder.getTransform().combine(transform));
+            }else if(Direction.equals("North")){
+                transform = transform.rotateY(180);
+                transform = transform.rotateX(0);
+                transform = transform.rotateZ(0);
+                holder.setTransform(holder.getTransform().combine(transform));
+            }else if(Direction.equals("West")){
+                transform = transform.rotateY(270);
+                transform = transform.rotateX(0);
+                transform = transform.rotateZ(0);
+                holder.setTransform(holder.getTransform().combine(transform));
+            }
+            Operation operation = holder
+                    .createPaste(editSession)
+                    .to(BlockVector3.at(Loc.getX(), Loc.getY(), Loc.getZ()))
+                    .ignoreAirBlocks(false)
+                    .build();
+            Operations.complete(operation);
         }
     }
 }

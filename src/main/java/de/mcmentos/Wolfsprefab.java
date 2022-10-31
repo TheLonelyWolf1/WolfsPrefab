@@ -23,7 +23,12 @@ public final class Wolfsprefab extends JavaPlugin {
         CommandRegisterer.registerCommands();
         EventRegisterer.registerEvents();
         CooldownManager.setupCooldown();
-
+        if(Bukkit.getPluginManager().getPlugin("WorldEdit") == null){
+            Bukkit.getConsoleSender().sendMessage("§c---------------------------------");
+            Bukkit.getConsoleSender().sendMessage(String.format("§d[%s]§c World Edit nicht gefunden!", getDescription().getName()));
+            Bukkit.getConsoleSender().sendMessage("§c---------------------------------");
+            getServer().getPluginManager().disablePlugin(this);
+        }
         // Startup finished
         Bukkit.getConsoleSender().sendMessage(String.format("§d[%s]§r Plugin geladen! Version:§a %s", getDescription().getName(), getDescription().getVersion()));
         Bukkit.getConsoleSender().sendMessage("§d---------------------------------");

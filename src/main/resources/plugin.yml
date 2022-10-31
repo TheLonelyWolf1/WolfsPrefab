@@ -5,3 +5,15 @@ api-version: 1.19
 prefix: WolfsPrefab
 authors: [ McMentos ]
 description: Spawn Buildings with one Click
+depend: [WorldEdit]
+
+commands:
+  wphelp:
+    description: Liste der Befehle.
+    permission: wolfprefab.help
+  wpdirthouse:
+    description: Spawne ein primitives Dirt Haus.
+    permission: wolfprefab.admin.give
+  wpclassichouse:
+    description: Spawne ein klassisches Haus mit Beet.
+    permission: wolfprefab.admin.give
