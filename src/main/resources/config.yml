@@ -1,0 +1,8 @@
+# | Config-Version: 3.9
+# [̲̲̅̅C̲̲̅̅o̲̲̅̅n̲̲̅̅f̲̲̅̅i̲̲̅̅g̲̲̅̅u̲̲̅̅r̲̲̅̅a̲̲̅̅t̲̲̅̅i̲̲̅̅o̲̲̅̅n̲̲̅̅s̲̲̅̅]
+config:
+  debug: true
+items:
+  worlds:
+    - world
+    - spawn

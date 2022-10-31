@@ -1,0 +1,7 @@
+name: WolfsPrefab
+version: '${project.version}'
+main: de.mcmentos.Wolfsprefab
+api-version: 1.19
+prefix: WolfsPrefab
+authors: [ McMentos ]
+description: Spawn Buildings with one Click
