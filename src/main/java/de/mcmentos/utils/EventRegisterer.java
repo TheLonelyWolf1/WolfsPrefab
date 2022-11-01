@@ -17,8 +17,5 @@ public class EventRegisterer {
         }
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new InteractEvents(), Plugin);
-        if(debug){
-            Bukkit.getConsoleSender().sendMessage(String.format("[%s] Done!", Prefix));
-        }
     }
 }

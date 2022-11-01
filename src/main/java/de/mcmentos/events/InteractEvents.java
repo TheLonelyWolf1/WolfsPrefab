@@ -37,11 +37,14 @@ public class InteractEvents implements Listener {
         ItemMeta meta = p.getInventory().getItemInMainHand().getItemMeta();
         if(!(meta == null)) {
             PersistentDataContainer container = meta.getPersistentDataContainer();
-            if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && p.getInventory().getItemInMainHand().getType().equals(Material.STICK) && container.has(key, PersistentDataType.STRING)){
+            @SuppressWarnings("unchecked")
+            List<String> worlds = (List<String>) Plugin.getConfig().getList("items.worlds");
+            assert worlds != null;
+            if(worlds.contains(world.toString()) && e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && p.getInventory().getItemInMainHand().getType().equals(Material.STICK) && container.has(key, PersistentDataType.STRING)){
                 if(CooldownManager.checkcooldownPrefab(e.getPlayer())){
                     // Get the Name from the PersistentDataContainer
                     String PrefabName = container.get(key, PersistentDataType.STRING);
-                    CooldownManager.setcooldownPrefab(e.getPlayer(), 5);
+                    CooldownManager.setcooldownPrefab(e.getPlayer(), 1);
                     p.getInventory().getItemInMainHand().setAmount(p.getInventory().getItemInMainHand().getAmount() - 1);
                     // Get the direction the player is looking.
                     String direction = UtilsFunctions.getPlayerDirection(p);
