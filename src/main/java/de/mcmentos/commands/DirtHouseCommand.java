@@ -9,6 +9,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Objects;
+
 public class DirtHouseCommand implements CommandExecutor {
 
     org.bukkit.plugin.Plugin Plugin = Wolfsprefab.getInstance();
@@ -21,7 +23,7 @@ public class DirtHouseCommand implements CommandExecutor {
                     if(args.length == 0) {
                         GiveFunctions.giveDirthouse(p, 64);
                     }else if(args.length == 1){
-                        String amount = args[1];
+                        String amount = args[0];
                         GiveFunctions.giveDirthouse(p, Integer.parseInt(amount));
                     }else if(args.length == 2){
                         Player other_player = Bukkit.getPlayer(args[0]);
@@ -29,12 +31,14 @@ public class DirtHouseCommand implements CommandExecutor {
                         String amount = args[1];
                         GiveFunctions.giveDirthouse(other_player, Integer.parseInt(amount));
                     }else{
-                        Bukkit.getConsoleSender().sendMessage(String.format("§e/%s <Name> <Anzahl>", cmd.getName()));
+                        p.sendMessage(Objects.requireNonNull(Plugin.getConfig().getString("format.commandhelp")).replaceAll("%wp-args%", cmd.getName()));
                     }
+                }else{
+                    p.sendMessage(Objects.requireNonNull(Plugin.getConfig().getString("format.perm")).replaceAll("%cp-args%", Objects.requireNonNull(cmd.getPermission())));
                 }
             }else{
                 if(args.length == 0){
-                    Bukkit.getConsoleSender().sendMessage(String.format("§e/%s <Name> <Anzahl>", cmd.getName()));
+                    Bukkit.getConsoleSender().sendMessage(Objects.requireNonNull(Plugin.getConfig().getString("format.commandhelp")).replaceAll("%wp-args%", cmd.getName()));
                 }else if(args.length == 1){
                     Player p = Bukkit.getPlayer(args[0]);
                     assert p != null;
@@ -45,7 +49,7 @@ public class DirtHouseCommand implements CommandExecutor {
                     String amount = args[1];
                     GiveFunctions.giveDirthouse(p, Integer.parseInt(amount));
                 }else{
-                    Bukkit.getConsoleSender().sendMessage(String.format("§e/%s <Name> <Anzahl>", cmd.getName()));
+                    Bukkit.getConsoleSender().sendMessage(Objects.requireNonNull(Plugin.getConfig().getString("format.commandhelp")).replaceAll("%wp-args%", cmd.getName()));
                 }
             }
         }

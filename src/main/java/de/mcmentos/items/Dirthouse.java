@@ -18,7 +18,8 @@ public class Dirthouse {
         meta.setDisplayName(ChatColor.DARK_AQUA + "Dirt House");
         ArrayList<String> lore = new ArrayList<String>();
         lore.add(ChatColor.DARK_AQUA + "1 Benutzung");
-        lore.add(ChatColor.DARK_GRAY + "Rechtsclicke vor dir auf den Boden!");
+        lore.add(ChatColor.DARK_RED + "Keine Haftung für Schäden!");
+        lore.add(ChatColor.DARK_GRAY + "Größe: 5x5x5!");
         meta.setLore(lore);
         // Custom Item Tags
         NamespacedKey key = new NamespacedKey(Wolfsprefab.getInstance(), "wolf_prefab");

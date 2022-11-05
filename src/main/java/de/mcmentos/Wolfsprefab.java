@@ -44,7 +44,7 @@ public final class Wolfsprefab extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        Bukkit.getConsoleSender().sendMessage(String.format("§d[%s]§r Auf Wiedersehen!", getDescription().getName()));
     }
 
     public void loadConfig() {

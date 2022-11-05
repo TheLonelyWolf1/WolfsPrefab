@@ -40,7 +40,7 @@ public class InteractEvents implements Listener {
             @SuppressWarnings("unchecked")
             List<String> worlds = (List<String>) Plugin.getConfig().getList("items.worlds");
             assert worlds != null;
-            if(worlds.contains(world.toString()) && e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && p.getInventory().getItemInMainHand().getType().equals(Material.STICK) && container.has(key, PersistentDataType.STRING)){
+            if(worlds.contains(world.getName()) && e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && p.getInventory().getItemInMainHand().getType().equals(Material.STICK) && container.has(key, PersistentDataType.STRING)){
                 if(CooldownManager.checkcooldownPrefab(e.getPlayer())){
                     // Get the Name from the PersistentDataContainer
                     String PrefabName = container.get(key, PersistentDataType.STRING);
@@ -55,8 +55,10 @@ public class InteractEvents implements Listener {
                     }
                     PrefabBuilder.loadSchematic(p,PrefabName, Objects.requireNonNull(e.getClickedBlock()).getLocation(), direction);
                 }else {
-                    p.sendMessage("Du hast noch einen Cooldown von " + ChatColor.GOLD + CooldownManager.getcooldownPrefab(p) + ChatColor.RESET + " Sekunden!");
+                    p.sendMessage(Objects.requireNonNull(Plugin.getConfig().getString("format.cooldown")).replaceAll("%wp-args%", String.valueOf(CooldownManager.getcooldownPrefab(p))));
                 }
+            }else if(p.getInventory().getItemInMainHand().getType().equals(Material.STICK) && container.has(key, PersistentDataType.STRING)){
+                p.sendMessage(Objects.requireNonNull(Plugin.getConfig().getString("format.disabledworld")));
             }
         }
     }

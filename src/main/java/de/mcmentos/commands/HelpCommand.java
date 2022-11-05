@@ -9,6 +9,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Objects;
 import java.util.Set;
 
 public class HelpCommand implements CommandExecutor {
@@ -46,8 +47,8 @@ public class HelpCommand implements CommandExecutor {
                     } else {
                         p.sendMessage("§cKorrekte Nutzung: /whelp");
                     }
-                }else {
-                    p.sendMessage("§cFehlende Berechtigung!  > §6wolfprefab.help");
+                }else{
+                    p.sendMessage(Objects.requireNonNull(Plugin.getConfig().getString("format.perm")).replaceAll("%cp-args%", Objects.requireNonNull(cmd.getPermission())));
                 }
             }else {
                 Bukkit.getConsoleSender().sendMessage(String.format("§b------[%s Hilfe]------", Plugin.getDescription().getName()));

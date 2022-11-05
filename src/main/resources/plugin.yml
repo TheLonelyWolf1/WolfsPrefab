@@ -17,3 +17,12 @@ commands:
   wpclassichouse:
     description: Spawne ein klassisches Haus mit Beet.
     permission: wolfprefab.admin.give
+  wpsmallcastlehouse:
+    description: Spawne ein verstärktes Haus.
+    permission: wolfprefab.admin.give
+  wpportalsword:
+    description: Spawne ein Netherportal-Schwert.
+    permission: wolfprefab.admin.give
+  wpswamphut:
+    description: Spawne eine kleine Sumpfhütte.
+    permission: wolfprefab.admin.give
