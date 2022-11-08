@@ -1,7 +1,6 @@
 package de.mcmentos.utils;
 
 import com.sk89q.worldedit.EditSession;
-import com.sk89q.worldedit.LocalSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.WorldEditException;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -33,27 +32,32 @@ public class PrefabBuilder {
         Clipboard clipboard;
         prefab_schematic = new File(df, "prefabs" + File.separator + name + ".schem");
         ClipboardFormat format = ClipboardFormats.findByFile(prefab_schematic);
+        assert format != null;
         try (ClipboardReader reader = format.getReader(Files.newInputStream(prefab_schematic.toPath()))) {
             clipboard = reader.read();
         }
         try (EditSession editSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(BukkitAdapter.adapt(world), -1)) {
             ClipboardHolder holder = new ClipboardHolder(clipboard);
             AffineTransform transform = new AffineTransform();
-            if(Direction.equals("East")){
-                transform = transform.rotateY(90);
-                transform = transform.rotateX(0);
-                transform = transform.rotateZ(0);
-                holder.setTransform(holder.getTransform().combine(transform));
-            }else if(Direction.equals("North")){
-                transform = transform.rotateY(180);
-                transform = transform.rotateX(0);
-                transform = transform.rotateZ(0);
-                holder.setTransform(holder.getTransform().combine(transform));
-            }else if(Direction.equals("West")){
-                transform = transform.rotateY(270);
-                transform = transform.rotateX(0);
-                transform = transform.rotateZ(0);
-                holder.setTransform(holder.getTransform().combine(transform));
+            switch (Direction) {
+                case "East":
+                    transform = transform.rotateY(90);
+                    transform = transform.rotateX(0);
+                    transform = transform.rotateZ(0);
+                    holder.setTransform(holder.getTransform().combine(transform));
+                    break;
+                case "North":
+                    transform = transform.rotateY(180);
+                    transform = transform.rotateX(0);
+                    transform = transform.rotateZ(0);
+                    holder.setTransform(holder.getTransform().combine(transform));
+                    break;
+                case "West":
+                    transform = transform.rotateY(270);
+                    transform = transform.rotateX(0);
+                    transform = transform.rotateZ(0);
+                    holder.setTransform(holder.getTransform().combine(transform));
+                    break;
             }
             Operation operation = holder
                     .createPaste(editSession)

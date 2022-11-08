@@ -32,7 +32,7 @@ public final class Wolfsprefab extends JavaPlugin {
         // Startup finished
         Bukkit.getConsoleSender().sendMessage(String.format("§d[%s]§r Plugin geladen! Version:§a %s", getDescription().getName(), getDescription().getVersion()));
         Bukkit.getConsoleSender().sendMessage("§d---------------------------------");
-        Integer files = Objects.requireNonNull(PrefabFileHandler.folder.listFiles()).length;
+        Integer files = Objects.requireNonNull(PrefabFileHandler.prefab_folder.listFiles()).length;
         Bukkit.getConsoleSender().sendMessage(String.format("'%s' Prefabs geladen!", files));
         if(debug) {
             Bukkit.getConsoleSender().sendMessage("§bDEBUG-MODE: §aaktiviert!");

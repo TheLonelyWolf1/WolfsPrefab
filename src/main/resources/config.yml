@@ -1,13 +1,14 @@
 # | Config-Version: 1.0
 # [̲̲̅̅C̲̲̅̅o̲̲̅̅n̲̲̅̅f̲̲̅̅i̲̲̅̅g̲̲̅̅u̲̲̅̅r̲̲̅̅a̲̲̅̅t̲̲̅̅i̲̲̅̅o̲̲̅̅n̲̲̅̅s̲̲̅̅]
 config:
-  debug: true
+  debug: false
 items:
   worlds:
     - world
     - spawn
 format:
-  perm: '§e/%wp-args% <Name> <Anzahl>'
-  commandhelp: '§cFehlende Berechtigung §a>> $6%wp-args%'
+  perm: '§cFehlende Berechtigung §a>> $6%wp-args%'
+  commandhelp: '§e/%wp-args% <Spieler> <Anzahl>'
+  spawnhelp: '§e/%wp-args% <Prefab> <Spieler> <Anzahl>'
   disabledworld: '$cDas Prefab-System ist für diese Welt deaktiviert!'
   cooldown: 'Du hast noch einen Cooldown von §6%wp-args%§r Sekunden!'

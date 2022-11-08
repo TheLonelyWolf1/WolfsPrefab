@@ -26,3 +26,6 @@ commands:
   wpswamphut:
     description: Spawne eine kleine Sumpfhütte.
     permission: wolfprefab.admin.give
+  wpspawn:
+    description: Spawn Befehl für die Prefabitems.
+    permission: wolfprefab.admin.give
