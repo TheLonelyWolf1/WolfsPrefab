@@ -23,4 +23,8 @@ public class GiveFunctions {
     public static void giveSwampHut(Player p, Integer amount) {
         p.getInventory().addItem(SwampHut.createSwampHut(amount));
     }
+
+    public static void givePrefabItem(Player p, Integer amount, String prefab){
+        p.getInventory().addItem(ItemCreator.createPrefabItem(prefab, amount));
+    }
 }

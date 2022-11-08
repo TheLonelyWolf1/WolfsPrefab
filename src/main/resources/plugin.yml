@@ -8,21 +8,6 @@ description: Spawn Buildings with one Click
 depend: [WorldEdit]
 
 commands:
-  wphelp:
-    description: Liste der Befehle.
-    permission: wolfprefab.help
-  wpdirthouse:
-    description: Spawne ein primitives Dirt Haus.
-    permission: wolfprefab.admin.give
-  wpclassichouse:
-    description: Spawne ein klassisches Haus mit Beet.
-    permission: wolfprefab.admin.give
-  wpsmallcastlehouse:
-    description: Spawne ein verstärktes Haus.
-    permission: wolfprefab.admin.give
-  wpportalsword:
-    description: Spawne ein Netherportal-Schwert.
-    permission: wolfprefab.admin.give
-  wpswamphut:
-    description: Spawne eine kleine Sumpfhütte.
+  wp:
+    description: Hauptbefehl.
     permission: wolfprefab.admin.give

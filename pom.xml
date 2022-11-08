@@ -6,7 +6,7 @@
 
     <groupId>WolfsPrefab</groupId>
     <artifactId>WolfsPrefab</artifactId>
-    <version>1.0_d2</version>
+    <version>1.0_d5</version>
     <packaging>jar</packaging>
 
     <name>WolfsPrefab</name>
@@ -80,6 +80,12 @@
             <artifactId>worldedit-bukkit</artifactId>
             <version>7.2.9</version>
             <scope>provided</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.12.0</version>
         </dependency>
 
     </dependencies>
