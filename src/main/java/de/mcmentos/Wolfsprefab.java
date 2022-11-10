@@ -5,6 +5,7 @@ import de.mcmentos.utils.CooldownManager;
 import de.mcmentos.utils.EventRegisterer;
 import de.mcmentos.utils.PrefabFileHandler;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 

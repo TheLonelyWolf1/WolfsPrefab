@@ -36,6 +36,13 @@ public class WolfsPrefabCommand implements TabCompleter, CommandExecutor {
                 }else if(args.length == 1){
                     // /wp spawn
                     switch (args[0]) {
+                        case "prefablist":
+                            p.sendMessage(ChatColor.GRAY + "-=" + ChatColor.GREEN + Plugin.getName() + ChatColor.GRAY + "=-");
+                            p.sendMessage(ChatColor.GRAY + "Bilder zu den Prefabs gibt es hier:");
+                            p.sendMessage(ChatColor.AQUA + "https://github.com/TheLonelyWolf1/WolfsPrefab/tree/master/src/main/images");
+                            p.sendMessage(ChatColor.GRAY + "Eine Liste zu den Prefabs gibt es hier:");
+                            p.sendMessage(ChatColor.AQUA + "https://github.com/TheLonelyWolf1/WolfsPrefab/tree/master/src/main/schematics");
+                            break;
                         case "give":
                             p.sendMessage(ChatColor.RED + "Falsche Benutzung! Bitte nutze:");
                             p.sendMessage(Objects.requireNonNull(Plugin.getConfig().getString("format.help.spawn")).replaceAll("%wp-args%", cmd.getName()));

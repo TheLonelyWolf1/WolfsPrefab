@@ -29,6 +29,7 @@ public class CommandRegisterer {
         subcommands.add("help");
         subcommands.add("give");
         subcommands.add("info");
+        subcommands.add("prefablist");
         return subcommands;
     }
 }
