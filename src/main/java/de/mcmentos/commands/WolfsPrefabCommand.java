@@ -36,7 +36,7 @@ public class WolfsPrefabCommand implements TabCompleter, CommandExecutor {
                 }else if(args.length == 1){
                     // /wp spawn
                     switch (args[0]) {
-                        case "spawn":
+                        case "give":
                             p.sendMessage(ChatColor.RED + "Falsche Benutzung! Bitte nutze:");
                             p.sendMessage(Objects.requireNonNull(Plugin.getConfig().getString("format.help.spawn")).replaceAll("%wp-args%", cmd.getName()));
                             break;
@@ -52,7 +52,7 @@ public class WolfsPrefabCommand implements TabCompleter, CommandExecutor {
                             for (String subcommand : subcommands) {
                                 if (subcommand.equals("help")) {
                                     p.sendMessage(ChatColor.GREEN + "/wp " + subcommand + ChatColor.GRAY + ChatColor.ITALIC.toString() + " Zeigt dieses Hilfemenü");
-                                } else if (subcommand.equals("spawn")) {
+                                } else if (subcommand.equals("give")) {
                                     p.sendMessage(ChatColor.GREEN + "/wp " + subcommand + ChatColor.GRAY + ChatColor.ITALIC.toString() + " Spawnbefehl für die Prefabs");
                                 } else if (subcommand.equals("info")) {
                                     p.sendMessage(ChatColor.GREEN + "/wp " + subcommand + ChatColor.GRAY + ChatColor.ITALIC.toString() + " Plugin Informationen");
@@ -69,19 +69,19 @@ public class WolfsPrefabCommand implements TabCompleter, CommandExecutor {
                     }
                 }else if(args.length == 2){
                     // /wp spawn <prefab>
-                    if(args[0].equals("spawn")){
+                    if(args[0].equals("give")){
                         GiveFunctions.givePrefabItem(p, 64, args[1]);
                     }
                 }else if(args.length == 3){
                     // /wp spawn <prefab> <Name>
-                    if(args[0].equals("spawn")){
+                    if(args[0].equals("give")){
                         Player player = Bukkit.getPlayer(args[2]);
                         assert player != null;
                         GiveFunctions.givePrefabItem(player, 64, args[1]);
                     }
                 } else if (args.length == 4) {
                     // /wp spawn <prefab> <Name> <Amount>
-                    if(args[0].equals("spawn")){
+                    if(args[0].equals("give")){
                         Player player = Bukkit.getPlayer(args[2]);
                         assert player != null;
                         String amount = args[3];
@@ -111,14 +111,14 @@ public class WolfsPrefabCommand implements TabCompleter, CommandExecutor {
                 return sortedResults(args[0]);
             }
         }else if (args.length == 2) {
-            if (cmd.getLabel().equalsIgnoreCase("wp") && args[0].equals("spawn")) {
+            if (cmd.getLabel().equalsIgnoreCase("wp") && args[0].equals("give")) {
                 results.clear();
                 List <String> files = PrefabFileHandler.getPrefabFiles();
                 results.addAll(files);
                 return sortedResults(args[1]);
             }
         }else if(args.length == 3){
-            if (cmd.getLabel().equalsIgnoreCase("wp") && args[0].equals("spawn")) {
+            if (cmd.getLabel().equalsIgnoreCase("wp") && args[0].equals("give")) {
                 results.clear();
                 Collection<? extends Player> Players = Bukkit.getOnlinePlayers();
                 for (Player player : Players){
@@ -127,7 +127,7 @@ public class WolfsPrefabCommand implements TabCompleter, CommandExecutor {
                 return sortedResults(args[2]);
             }
         }else if(args.length == 4){
-            if (cmd.getLabel().equalsIgnoreCase("wp") && args[0].equals("spawn")) {
+            if (cmd.getLabel().equalsIgnoreCase("wp") && args[0].equals("give")) {
                 results.clear();
                 for (int i = 1; i < 65 ; i++)
                 {
