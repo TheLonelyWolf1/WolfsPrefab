@@ -7,10 +7,7 @@ import de.mcmentos.utils.PrefabFileHandler;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
@@ -30,61 +27,135 @@ public class WolfsPrefabCommand implements TabCompleter, CommandExecutor {
                 }
                 Player p = (Player) sender;
                 //  /wp <command/args0> <Prefab/arg1> <Name/arg2> <Amount/arg3>
+                if(p.hasPermission("wolfprefab.admin.give")){
+                    if(args.length == 0){
+                        p.sendMessage(ChatColor.RED + "Falsche Benutzung! Bitte nutze:");
+                        p.sendMessage(Objects.requireNonNull(Plugin.getConfig().getString("format.help.default")).replaceAll("%wp-args%", cmd.getName()));
+                    }else if(args.length == 1){
+                        // /wp spawn
+                        switch (args[0]) {
+                            case "prefablist":
+                                p.sendMessage(ChatColor.GRAY + "-=" + ChatColor.GREEN + Plugin.getName() + ChatColor.GRAY + "=-");
+                                p.sendMessage(ChatColor.GRAY + "Bilder zu den Prefabs gibt es hier:");
+                                p.sendMessage(ChatColor.AQUA + "https://github.com/TheLonelyWolf1/WolfsPrefab/tree/master/src/main/images");
+                                p.sendMessage(ChatColor.GRAY + "Eine Liste zu den Prefabs gibt es hier:");
+                                p.sendMessage(ChatColor.AQUA + "https://github.com/TheLonelyWolf1/WolfsPrefab/tree/master/src/main/schematics");
+                                break;
+                            case "give":
+                                p.sendMessage(ChatColor.RED + "Falsche Benutzung! Bitte nutze:");
+                                p.sendMessage(Objects.requireNonNull(Plugin.getConfig().getString("format.help.spawn")).replaceAll("%wp-args%", cmd.getName()));
+                                break;
+                            case "info":
+                                p.sendMessage(ChatColor.GRAY + "-=" + ChatColor.GREEN + Plugin.getName() + ChatColor.GRAY + "=-");
+                                p.sendMessage(ChatColor.AQUA + "Version: " + ChatColor.GRAY + Plugin.getDescription().getVersion());
+                                p.sendMessage(ChatColor.AQUA + "Author: " + ChatColor.GRAY + Plugin.getDescription().getAuthors());
+                                p.sendMessage(ChatColor.AQUA + "Command: " + ChatColor.GRAY + "/wp");
+                                break;
+                            case "help":
+                                p.sendMessage(String.format(ChatColor.AQUA + "------[%s Hilfe]------", Plugin.getDescription().getName()));
+                                List<String> subcommands = CommandRegisterer.Subcommands();
+                                for (String subcommand : subcommands) {
+                                    if (subcommand.equals("help")) {
+                                        p.sendMessage(ChatColor.GREEN + "/wp " + subcommand + ChatColor.GRAY + ChatColor.ITALIC.toString() + " Zeigt dieses Hilfemenü");
+                                    } else if (subcommand.equals("give")) {
+                                        p.sendMessage(ChatColor.GREEN + "/wp " + subcommand + ChatColor.GRAY + ChatColor.ITALIC.toString() + " Spawnbefehl für die Prefabs");
+                                    } else if (subcommand.equals("info")) {
+                                        p.sendMessage(ChatColor.GREEN + "/wp " + subcommand + ChatColor.GRAY + ChatColor.ITALIC.toString() + " Plugin Informationen");
+                                    } else {
+                                        p.sendMessage(ChatColor.GREEN + "/wp " + subcommand + ChatColor.GRAY + ChatColor.ITALIC.toString() + " None");
+                                    }
+                                }
+                                p.sendMessage("§b----------------------------");
+                                break;
+                            default:
+                                p.sendMessage(ChatColor.RED + "Falsche Benutzung! Bitte nutze:");
+                                p.sendMessage(Objects.requireNonNull(Plugin.getConfig().getString("format.help.default")).replaceAll("%wp-args%", cmd.getName()));
+                                break;
+                        }
+                    }else if(args.length == 2){
+                        // /wp spawn <prefab>
+                        if(args[0].equals("give")){
+                            GiveFunctions.givePrefabItem(p, 64, args[1]);
+                        }
+                    }else if(args.length == 3){
+                        // /wp spawn <prefab> <Name>
+                        if(args[0].equals("give")){
+                            Player player = Bukkit.getPlayer(args[2]);
+                            assert player != null;
+                            GiveFunctions.givePrefabItem(player, 64, args[1]);
+                        }
+                    } else if (args.length == 4) {
+                        // /wp spawn <prefab> <Name> <Amount>
+                        if(args[0].equals("give")){
+                            Player player = Bukkit.getPlayer(args[2]);
+                            assert player != null;
+                            String amount = args[3];
+                            GiveFunctions.givePrefabItem(player, Integer.valueOf(amount), args[1]);
+                        }
+                    } else {
+                        p.sendMessage(ChatColor.RED + "Falsche Benutzung! Bitte nutze:");
+                        p.sendMessage(Objects.requireNonNull(Plugin.getConfig().getString("format.help.default")).replaceAll("%wp-args%", cmd.getName()));
+                    }
+                }else{
+                    p.sendMessage(Objects.requireNonNull(Plugin.getConfig().getString("format.perm")).replaceAll("%wp-args%", "wolfprefab.admin.give"));
+                }
+            }else{
+                ConsoleCommandSender console = Bukkit.getConsoleSender();
                 if(args.length == 0){
-                    p.sendMessage(ChatColor.RED + "Falsche Benutzung! Bitte nutze:");
-                    p.sendMessage(Objects.requireNonNull(Plugin.getConfig().getString("format.help.default")).replaceAll("%wp-args%", cmd.getName()));
+                    console.sendMessage(ChatColor.RED + "Falsche Benutzung! Bitte nutze:");
+                    console.sendMessage(Objects.requireNonNull(Plugin.getConfig().getString("format.help.default")).replaceAll("%wp-args%", cmd.getName()));
                 }else if(args.length == 1){
                     // /wp spawn
                     switch (args[0]) {
                         case "prefablist":
-                            p.sendMessage(ChatColor.GRAY + "-=" + ChatColor.GREEN + Plugin.getName() + ChatColor.GRAY + "=-");
-                            p.sendMessage(ChatColor.GRAY + "Bilder zu den Prefabs gibt es hier:");
-                            p.sendMessage(ChatColor.AQUA + "https://github.com/TheLonelyWolf1/WolfsPrefab/tree/master/src/main/images");
-                            p.sendMessage(ChatColor.GRAY + "Eine Liste zu den Prefabs gibt es hier:");
-                            p.sendMessage(ChatColor.AQUA + "https://github.com/TheLonelyWolf1/WolfsPrefab/tree/master/src/main/schematics");
+                            console.sendMessage(ChatColor.GRAY + "-=" + ChatColor.GREEN + Plugin.getName() + ChatColor.GRAY + "=-");
+                            console.sendMessage(ChatColor.GRAY + "Bilder zu den Prefabs gibt es hier:");
+                            console.sendMessage(ChatColor.AQUA + "https://github.com/TheLonelyWolf1/WolfsPrefab/tree/master/src/main/images");
+                            console.sendMessage(ChatColor.GRAY + "Eine Liste zu den Prefabs gibt es hier:");
+                            console.sendMessage(ChatColor.AQUA + "https://github.com/TheLonelyWolf1/WolfsPrefab/tree/master/src/main/schematics");
                             break;
                         case "give":
-                            p.sendMessage(ChatColor.RED + "Falsche Benutzung! Bitte nutze:");
-                            p.sendMessage(Objects.requireNonNull(Plugin.getConfig().getString("format.help.spawn")).replaceAll("%wp-args%", cmd.getName()));
+                            console.sendMessage(ChatColor.RED + "Falsche Benutzung! Bitte nutze:");
+                            console.sendMessage(Objects.requireNonNull(Plugin.getConfig().getString("format.help.spawn")).replaceAll("%wp-args%", cmd.getName()));
                             break;
                         case "info":
-                            p.sendMessage(ChatColor.GRAY + "-=" + ChatColor.GREEN + Plugin.getName() + ChatColor.GRAY + "=-");
-                            p.sendMessage(ChatColor.AQUA + "Version: " + ChatColor.GRAY + Plugin.getDescription().getVersion());
-                            p.sendMessage(ChatColor.AQUA + "Author: " + ChatColor.GRAY + Plugin.getDescription().getAuthors());
-                            p.sendMessage(ChatColor.AQUA + "Command: " + ChatColor.GRAY + "/wp");
+                            console.sendMessage(ChatColor.GRAY + "-=" + ChatColor.GREEN + Plugin.getName() + ChatColor.GRAY + "=-");
+                            console.sendMessage(ChatColor.AQUA + "Version: " + ChatColor.GRAY + Plugin.getDescription().getVersion());
+                            console.sendMessage(ChatColor.AQUA + "Author: " + ChatColor.GRAY + Plugin.getDescription().getAuthors());
+                            console.sendMessage(ChatColor.AQUA + "Command: " + ChatColor.GRAY + "/wp");
                             break;
                         case "help":
-                            p.sendMessage(String.format(ChatColor.AQUA + "------[%s Hilfe]------", Plugin.getDescription().getName()));
+                            console.sendMessage(String.format(ChatColor.AQUA + "------[%s Hilfe]------", Plugin.getDescription().getName()));
                             List<String> subcommands = CommandRegisterer.Subcommands();
                             for (String subcommand : subcommands) {
                                 if (subcommand.equals("help")) {
-                                    p.sendMessage(ChatColor.GREEN + "/wp " + subcommand + ChatColor.GRAY + ChatColor.ITALIC.toString() + " Zeigt dieses Hilfemenü");
+                                    console.sendMessage(ChatColor.GREEN + "/wp " + subcommand + ChatColor.GRAY + ChatColor.ITALIC.toString() + " Zeigt dieses Hilfemenü");
                                 } else if (subcommand.equals("give")) {
-                                    p.sendMessage(ChatColor.GREEN + "/wp " + subcommand + ChatColor.GRAY + ChatColor.ITALIC.toString() + " Spawnbefehl für die Prefabs");
+                                    console.sendMessage(ChatColor.GREEN + "/wp " + subcommand + ChatColor.GRAY + ChatColor.ITALIC.toString() + " Spawnbefehl für die Prefabs");
                                 } else if (subcommand.equals("info")) {
-                                    p.sendMessage(ChatColor.GREEN + "/wp " + subcommand + ChatColor.GRAY + ChatColor.ITALIC.toString() + " Plugin Informationen");
+                                    console.sendMessage(ChatColor.GREEN + "/wp " + subcommand + ChatColor.GRAY + ChatColor.ITALIC.toString() + " Plugin Informationen");
                                 } else {
-                                    p.sendMessage(ChatColor.GREEN + "/wp " + subcommand + ChatColor.GRAY + ChatColor.ITALIC.toString() + " None");
+                                    console.sendMessage(ChatColor.GREEN + "/wp " + subcommand + ChatColor.GRAY + ChatColor.ITALIC.toString() + " None");
                                 }
                             }
-                            p.sendMessage("§b----------------------------");
+                            console.sendMessage("§b----------------------------");
                             break;
                         default:
-                            p.sendMessage(ChatColor.RED + "Falsche Benutzung! Bitte nutze:");
-                            p.sendMessage(Objects.requireNonNull(Plugin.getConfig().getString("format.help.default")).replaceAll("%wp-args%", cmd.getName()));
+                            console.sendMessage(ChatColor.RED + "Falsche Benutzung! Bitte nutze:");
+                            console.sendMessage(Objects.requireNonNull(Plugin.getConfig().getString("format.help.default")).replaceAll("%wp-args%", cmd.getName()));
                             break;
                     }
                 }else if(args.length == 2){
                     // /wp spawn <prefab>
                     if(args[0].equals("give")){
-                        GiveFunctions.givePrefabItem(p, 64, args[1]);
+                        console.sendMessage(ChatColor.RED + "Falsche Benutzung! Bitte nutze:");
+                        console.sendMessage(Objects.requireNonNull(Plugin.getConfig().getString("format.help.spawn")).replaceAll("%wp-args%", cmd.getName()));
                     }
                 }else if(args.length == 3){
                     // /wp spawn <prefab> <Name>
                     if(args[0].equals("give")){
-                        Player player = Bukkit.getPlayer(args[2]);
-                        assert player != null;
-                        GiveFunctions.givePrefabItem(player, 64, args[1]);
+                        console.sendMessage(ChatColor.RED + "Falsche Benutzung! Bitte nutze:");
+                        console.sendMessage(Objects.requireNonNull(Plugin.getConfig().getString("format.help.spawn")).replaceAll("%wp-args%", cmd.getName()));
                     }
                 } else if (args.length == 4) {
                     // /wp spawn <prefab> <Name> <Amount>
@@ -95,11 +166,9 @@ public class WolfsPrefabCommand implements TabCompleter, CommandExecutor {
                         GiveFunctions.givePrefabItem(player, Integer.valueOf(amount), args[1]);
                     }
                 } else {
-                    p.sendMessage(ChatColor.RED + "Falsche Benutzung! Bitte nutze:");
-                    p.sendMessage(Objects.requireNonNull(Plugin.getConfig().getString("format.help.default")).replaceAll("%wp-args%", cmd.getName()));
+                    console.sendMessage(ChatColor.RED + "Falsche Benutzung! Bitte nutze:");
+                    console.sendMessage(Objects.requireNonNull(Plugin.getConfig().getString("format.help.default")).replaceAll("%wp-args%", cmd.getName()));
                 }
-            }else{
-                Bukkit.getConsoleSender().sendMessage("[" + Plugin.getName() + "] This command is player-only!");
             }
         }
         return false;
