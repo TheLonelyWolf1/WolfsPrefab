@@ -1,13 +1,8 @@
 package de.mcmentos.utils;
 
-import de.mcmentos.Wolfsprefab;
 import org.bukkit.entity.Player;
 
 public class UtilsFunctions {
-
-    static org.bukkit.plugin.Plugin Plugin = Wolfsprefab.getInstance();
-    static String Prefix = Plugin.getName();
-    static Boolean debug = Wolfsprefab.instance.isDebugEnabled();
 
     public static String getPlayerDirection(Player p){
         double rotation = p.getLocation().getYaw() - 180;
