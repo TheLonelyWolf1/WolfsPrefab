@@ -24,20 +24,31 @@ public class InteractEvents implements Listener {
 
     static org.bukkit.plugin.Plugin Plugin = Wolfsprefab.getInstance();
     static String Prefix = Plugin.getName();
+    static NamespacedKey key = new NamespacedKey(Plugin, "wolf_prefab");
     static Boolean debug = Wolfsprefab.instance.isDebugEnabled();
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) throws IOException, WorldEditException {
+        if(!e.getAction().equals(Action.RIGHT_CLICK_BLOCK)){
+            return;
+        }
         // Get Player from the Event
         Player p = e.getPlayer();
         // Get World from the Event
         World world = p.getWorld();
+        if(!p.getInventory().getItemInMainHand().getType().equals(Material.STICK)){
+            return;
+        }
         // Create a NamespacedKey for use in the function
-        NamespacedKey key = new NamespacedKey(Plugin, "wolf_prefab");
         // Get the ItemMeta from the Item in the Mainhand of the Player
         ItemMeta meta = p.getInventory().getItemInMainHand().getItemMeta();
         // If the Item has no Meta set, return
         if(meta == null){
+            return;
+        }
+        // Get the Persistant Data from the Itemmeta
+        PersistentDataContainer container = meta.getPersistentDataContainer();
+        if(!container.has(key, PersistentDataType.STRING)){
             return;
         }
         // Get the Worlds from the config_path
@@ -51,34 +62,26 @@ public class InteractEvents implements Listener {
             p.sendMessage(Objects.requireNonNull(Plugin.getConfig().getString("format.disabledworld")));
             return;
         }
-        // Get the Persistant Data from the Itemmeta
-        PersistentDataContainer container = meta.getPersistentDataContainer();
-        if(!container.has(key, PersistentDataType.STRING)){
+
+        //Check if the Player has a Cooldown
+        if(!CooldownManager.checkcooldownPrefab(e.getPlayer())){
+            p.sendMessage(Objects.requireNonNull(Plugin.getConfig().getString("format.cooldown")).replaceAll("%wp-args%", String.valueOf(CooldownManager.getcooldownPrefab(p))));
             return;
         }
-
-        // If Player rightclicked with the item and the held item is a Stick
-        if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && p.getInventory().getItemInMainHand().getType().equals(Material.STICK)){
-            //Check if the Player has a Cooldown
-            if(!CooldownManager.checkcooldownPrefab(e.getPlayer())){
-                p.sendMessage(Objects.requireNonNull(Plugin.getConfig().getString("format.cooldown")).replaceAll("%wp-args%", String.valueOf(CooldownManager.getcooldownPrefab(p))));
-                return;
-            }
-            // Get the Prefab-Name from the PersistentDataContainer
-            String PrefabName = container.get(key, PersistentDataType.STRING);
-            // Set a Cooldown of 1 Seconds for the player
-            CooldownManager.setcooldownPrefab(e.getPlayer(), 1);
-            // Remove the Stick from the Player's Inventory
-            p.getInventory().getItemInMainHand().setAmount(p.getInventory().getItemInMainHand().getAmount() - 1);
-            // Get the direction the player is looking.
-            String direction = UtilsFunctions.getPlayerDirection(p);
-            if(debug){
-                p.sendMessage(direction);
-                assert PrefabName != null;
-                p.sendMessage(PrefabName);
-            }
-            // Load the Prefab at the desired location in the desired direction
-            PrefabBuilder.loadSchematic(p,PrefabName, Objects.requireNonNull(e.getClickedBlock()).getLocation(), direction);
+        // Get the Prefab-Name from the PersistentDataContainer
+        String PrefabName = container.get(key, PersistentDataType.STRING);
+        // Set a Cooldown of 1 Seconds for the player
+        CooldownManager.setcooldownPrefab(e.getPlayer(), 1);
+        // Remove the Stick from the Player's Inventory
+        p.getInventory().getItemInMainHand().setAmount(p.getInventory().getItemInMainHand().getAmount() - 1);
+        // Get the direction the player is looking.
+        String direction = UtilsFunctions.getPlayerDirection(p);
+        if(debug){
+            p.sendMessage(direction);
+            assert PrefabName != null;
+            p.sendMessage(PrefabName);
         }
+        // Load the Prefab at the desired location in the desired direction
+        PrefabBuilder.loadSchematic(p,PrefabName, Objects.requireNonNull(e.getClickedBlock()).getLocation(), direction);
     }
 }
